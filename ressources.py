@@ -49,7 +49,7 @@ listeVoiles = [
         ]
 
 listeEquipementStart = [
-    "Canons de base",
+    "Canon de base",
     "Voile de base",
     "Coque de base"
 ]
