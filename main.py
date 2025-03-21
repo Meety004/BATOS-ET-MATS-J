@@ -314,7 +314,7 @@ while running:
     screen.fill((170, 170, 170))
 
     # affichage de l'ocean en fond
-    screen.blit(ocean, (0, 0))
+    screen.blit(frames, (0, 0))
 
     # Dessine les navires
     for navire_i in liste_navire:
