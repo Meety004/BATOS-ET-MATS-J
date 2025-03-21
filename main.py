@@ -27,6 +27,52 @@ dt = clock.tick(framerate)
 ocean = pygame.image.load("images/Backgrounds/ocean background.jpg").convert_alpha()
 ocean = pygame.transform.scale(ocean, (screen_width, (playHeight + (1/34 * screen_height)))).convert_alpha()
 
+running = True
+spriteVY = 3
+
+frames = [] # stockage de chaque image
+for i in range(9):
+    frames.append(pygame.image.load(f"OCEAN{i+1}.gif").convert_alpha())
+
+class MySprite(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.vel = (0, 0)
+        self.image = pygame.Surface((100, 200))
+        self.image.fill((255, 255, 255))
+        self.rect = self.image.get_rect(topleft = (x, y))
+
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((100, 10))
+        self.image.fill((142, 212, 25))
+        self.rect = self.image.get_rect(topleft = (x, y))
+
+sprite = MySprite(100, 100)
+platform = Platform(50, 20)
+group = pygame.sprite.Group([sprite, platform])
+
+on_ground = True
+while running:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            
+    if not on_ground:
+
+        sprite.rect.y += spriteVY
+        spriteVY += 1
+    screen.fill((0, 0, 0))
+    group.draw(screen)
+    for img in idle_imgs:
+        print(img)
+        chosen_img = pygame.image.load(img)
+        screen.blit(chosen_img, ((100, 100)))
+    pygame.display.flip()
+    clock.tick(24)
+
 # chargment de l'image avec un giga tir
 giga_tir_image = pygame.transform.scale(pygame.image.load("images/icons/BenedictionsPlay/giga_tir.png"), (70, 70)).convert_alpha()
 rage_image = pygame.transform.scale(pygame.image.load("images/icons/BenedictionsPlay/rage.png"), (70, 70)).convert_alpha()
