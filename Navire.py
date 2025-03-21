@@ -50,7 +50,7 @@ class Navire:
             'coque':    "Coque de base"
             }
 
-        self.benedictions = ["Bénédiciton de rage", "Bénédiciton de rage"]
+        self.benedictions = [None, None]
 
         self.recompense = None
 

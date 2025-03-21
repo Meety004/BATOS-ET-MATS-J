@@ -185,10 +185,10 @@ while running:
                 if tir_du_navire is not None:
                     liste_shot.extend(tir_du_navire)
 
-            if keys[pygame.K_s]:
+            if keys[pygame.K_1]:
                 navire_i.use_benediction_1()
             
-            if keys[pygame.K_d]:
+            if keys[pygame.K_1]:
                 navire_i.use_benediction_2()
 
 
