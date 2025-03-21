@@ -31,9 +31,12 @@ class Navire:
         self.type = type
 
         self.afficher_items = False  # Variable d'état pour suivre l'affichage de l'image
+        self.afficher_benediction = False
         self.ItemsUI = pygame.image.load("images/Interfaces/equip_menu_item.png").convert_alpha()
         self.ItemsUI = pygame.transform.scale(self.ItemsUI, (screen_width*0.4, pygame.display.Info().current_h*0.4)).convert_alpha()
-        
+        self.benedictionUI = pygame.image.load("images/Interfaces/equip_menu_bene.png").convert_alpha()
+        self.benedictionUI = pygame.transform.scale(self.benedictionUI, (screen_width*0.4, pygame.display.Info().current_h*0.4)).convert_alpha()
+
         if self.type == 2:
             self.equipement = {
             'canons':    "+2 Canons",
@@ -47,7 +50,7 @@ class Navire:
             'coque':    "Coque de base"
             }
 
-        self.benedictions = ["Bénédiction de rage", "Bénédiction d'aura"]
+        self.benedictions = ["Bénédiction Projectile", "Bénédiciton de rage"]
 
         self.recompense = None
 
@@ -273,6 +276,19 @@ class Navire:
                 self.updateIcons()
                 self.verifIleMalus = True
 
+            if self.recompense[0] in res.liste_benedictions:
+                print(recompense)
+                if res.calc_distance(self.x, self.y, xIle, yIle) <= 75:
+                    self.afficher_benediction = True
+                    self.afficher_items = False
+                else:
+                    self.afficher_benediction = False
+
+    def ile_hors_de_porte(self):
+        self.afficher_benediction = False
+        self.afficher_items = False
+                
+
 
     def equiper(self):
         if self.recompense[0] in res.listeCanons:
@@ -290,6 +306,13 @@ class Navire:
                 self.equipement['coque'] = self.recompense[0]
         print(self.equipement, self.type)
         self.effetItem()
+    
+    def equiper_benediction(self, emplacement):
+        if self.recompense[0] in res.liste_benedictions:
+            if emplacement == 0:
+                self.benedictions[0] = self.recompense[0]
+            elif emplacement == 1:
+                self.benedictions[1] = self.recompense[0]
 
     def effetItem(self):
         self.updateIcons()
@@ -366,10 +389,11 @@ class Navire:
             
             if self.timer_benediction_1.timer_ended_special(self.timer_sante) or self.timer_benediction_1.timer_ended():
                 if self.benedictions[0] == "Bénédiction Santé": # te rend 50% de ta vie max
-                    self.vie += math.floor(self.maxVie*0.5)
-                    if self.vie > self.maxVie:
-                        self.vie = self.maxVie
-                    self.timer_benediction_1 = res.Timer(50)
+                    if self.vie != self.vieMax: # on peut pas se soigner si on est full
+                        self.vie += math.floor(self.maxVie*0.5)
+                        if self.vie > self.maxVie:
+                            self.vie = self.maxVie
+                        self.timer_benediction_1 = res.Timer(50)
             
             if self.timer_benediction_1.timer_ended_special(self.timer_aura) or self.timer_benediction_1.timer_ended():
                 if self.benedictions[0] == "Bénédiction d'aura":
@@ -379,7 +403,7 @@ class Navire:
                     self.aura_degat = 2
 
             if self.timer_benediction_1.timer_ended_special(self.timer_rage) or self.timer_benediction_1.timer_ended():
-                if self.benedictions[0] == "Bénédiction de rage":
+                if self.benedictions[0] == "Bénédiciton de rage":
                     self.rage_timer = res.Timer(15)
                     self.inraged = True
                     self.life_before_rage = self.vie/self.maxVie

@@ -275,25 +275,55 @@ while running:
         if timeLeft <= 0:
             liste_iles.remove(ile)
             nbrIles -= 1
+            for navire in liste_navire:
+                navire.ile_hors_de_porte()
 
         for n in liste_navire:
             if len(liste_navire) > 0:
                 recompense = ile.type_recompenses()
-                n.equipInterface(recompense, ile.position_x(), ile.position_y())
-                if n.afficher_items == True:
+                if res.calc_distance(n.position_x(), n.position_y(), ile.position_x(), ile.position_y()) < 75:
+                    n.equipInterface(recompense, ile.position_x(), ile.position_y())
+                    
+                    if n.afficher_items == True:
+                        if keys[pygame.K_a] or n.type in (1, 3):
+                            if res.calc_distance(n.position_x(), n.position_y(), ile.position_x(), ile.position_y()) < 75:
+                                if ile in liste_iles:
+                                    liste_iles.remove(ile)
+                                    nbrIles -= 1
+                            n.afficher_items = False
+                            n.equiper()
+                    
+                    if n.afficher_benediction == True:
+                        if keys[pygame.K_1] or n.type in (1, 3):
+                            if res.calc_distance(n.position_x(), n.position_y(), ile.position_x(), ile.position_y()) < 75:
+                                if ile in liste_iles:
+                                    liste_iles.remove(ile)
+                                    nbrIles -= 1
+                                n.afficher_benediction = False
+                                n.equiper_benediction(0)
+                        if keys[pygame.K_2] or n.type in (1, 3):
+                            if res.calc_distance(n.position_x(), n.position_y(), ile.position_x(), ile.position_y()) < 75:
+                                if ile in liste_iles:
+                                    liste_iles.remove(ile)
+                                    nbrIles -= 1
+                                n.afficher_benediction = False
+                                n.equiper_benediction(1)
 
-                    if keys[pygame.K_a] or n.type in (1, 3):
-                        if res.calc_distance(n.position_x(), n.position_y(), ile.position_x(), ile.position_y()) < 75:
-                            if ile in liste_iles:
-                                liste_iles.remove(ile)
-                                nbrIles -= 1
-                        n.afficher_items = False
-                        n.equiper()
                 elif res.calc_distance(n.position_x(), n.position_y(), ile.position_x(), ile.position_y()) < 75:
                     verifIleMalus = n.verifIleMalus
                     if verifIleMalus == True:
                         liste_iles.remove(ile)
                         verifIleMalus = False
+    
+    # verifie si les navires est a porté d'aucune ile
+    a_porte = False
+    for navire in liste_navire:
+        for ile in liste_iles:
+            if res.calc_distance(navire.position_x(), navire.position_y(), ile.position_x(), ile.position_y()) < 75:
+                a_porte = True
+        if a_porte == False:
+            navire.ile_hors_de_porte()
+            
 
 
     # Appelle de la fonction de compte à rebours pour apparition des îles
@@ -340,6 +370,8 @@ while running:
     #Affiche l'interface de choix d'item pour le joueur uniquement
     if liste_joueur[0].afficher_items == True:
         screen.blit(liste_joueur[0].ItemsUI, (15, 15))
+    if liste_joueur[0].afficher_benediction == True:
+        screen.blit(liste_joueur[0].benedictionUI, (15, 15))
         
     # affiche la bare de vie du joueur
     
