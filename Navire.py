@@ -50,7 +50,7 @@ class Navire:
             'coque':    "Coque de base"
             }
 
-        self.benedictions = ["Bénédiction Projectile", "Bénédiciton de rage"]
+        self.benedictions = ["Bénédiciton de rage", "Bénédiciton de rage"]
 
         self.recompense = None
 
@@ -447,7 +447,7 @@ class Navire:
                     self.aura_degat = 1
 
             if self.timer_benediction_2.timer_ended_special(self.timer_rage) or self.timer_benediction_2.timer_ended():
-                if self.benedictions[1] == "Bénédiction de rage":
+                if self.benedictions[1] == "Bénédiciton de rage":
                     self.rage_timer = res.Timer(10)
                     self.inraged = True
                     self.life_before_rage = self.vie/self.maxVie
