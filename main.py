@@ -24,11 +24,13 @@ clock = pygame.time.Clock()
 dt = clock.tick(framerate)
 
 #bg
+time_last_update = pygame.time.get_ticks()
 frames = [] # stockage de chaque image
 for i in range(9):
     temp = pygame.image.load(f"images/Backgrounds/OCEAN{i+1}.gif").convert_alpha()
     temp = pygame.transform.scale(temp, (screen_width, (playHeight + (1/34 * screen_height)))).convert_alpha()
     frames.append(temp)
+current_frame = 1
 running = True
 spriteVY = 3
 
@@ -314,7 +316,12 @@ while running:
     screen.fill((170, 170, 170))
 
     # affichage de l'ocean en fond
-    screen.blit(frames, (0, 0))
+    current_time = pygame.time.get_ticks()
+    if current_time - time_last_update > 350:  # Changer de frame toutes les 100 ms
+        current_frame = (current_frame + 1) % len(frames)
+        image = frames[current_frame]
+        time_last_update = current_time
+    screen.blit(image, (0, 0))
 
     # Dessine les navires
     for navire_i in liste_navire:
