@@ -27,7 +27,7 @@ dt = clock.tick(framerate)
 frames = [] # stockage de chaque image
 for i in range(9):
     frames.append(pygame.image.load(f"images/Backgrounds/OCEAN{i+1}.gif").convert_alpha())
-frames = pygame.transform.scale(ocean, (screen_width, (playHeight + (1/34 * screen_height)))).convert_alpha()
+frames = pygame.transform.scale(frames, (screen_width, (playHeight + (1/34 * screen_height)))).convert_alpha()
 running = True
 spriteVY = 3
 
